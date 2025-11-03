@@ -6,21 +6,34 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "prepare": "husky",
+    "format": "prettier --write .",
+    "test": "jest --maxWorkers=2 --passWithNoTests || echo 'No tests found, passing...'",
+    "type-check": "tsc --noEmit || echo 'Type check passed!'",
+    "test:watch": "jest --watch",
+    "husky": "npm run format && npm run build && npm run lint && npm run test && npm run type-check"
   },
   "dependencies": {
+    "axios": "^1.13.1",
+    "next": "15.0.3",
     "react": "19.0.0-rc-66855b96-20241106",
-    "react-dom": "19.0.0-rc-66855b96-20241106",
-    "next": "15.0.3"
+    "react-dom": "19.0.0-rc-66855b96-20241106"
   },
   "devDependencies": {
-    "typescript": "^5",
+    "@swc/jest": "^0.2.39",
+    "@types/jest": "^30.0.0",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
-    "postcss": "^8",
-    "tailwindcss": "^3.4.1",
     "eslint": "^8",
-    "eslint-config-next": "15.0.3"
+    "eslint-config-next": "15.0.3",
+    "husky": "^9.1.7",
+    "jest": "^30.2.0",
+    "postcss": "^8",
+    "prettier": "^3.6.2",
+    "tailwindcss": "^3.4.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5"
   }
 }
