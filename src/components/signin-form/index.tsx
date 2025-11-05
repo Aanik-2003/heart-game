@@ -1,36 +1,29 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
-import { loginSchema, LoginSchema } from "./login-schema";
-import Image from "next/image";
+import { signinSchema, SignInSchema } from "./signin-schema";
 
-export function LoginForm() {
+export function SignInForm() {
   const [isLoading, setIsLoading] = useState(false);
 
-  const form = useForm<LoginSchema>({
-    resolver: zodResolver(loginSchema),
+  const form = useForm<SignInSchema>({
+    resolver: zodResolver(signinSchema),
     defaultValues: {
       email: "",
       password: "",
     },
   });
 
-  const onSubmit = async (values: LoginSchema) => {
+  const onSubmit = async (values: SignInSchema) => {
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
@@ -39,21 +32,8 @@ export function LoginForm() {
     }, 1200);
   };
 
-  const handleGoogleLogin = async () => {
-    console.log("google btn is pressed");
-  };
-
   return (
     <Card className="w-full max-w-md">
-      <CardHeader className="space-y-1">
-        <CardTitle className="text-2xl font-bold text-center">
-          Sign In
-        </CardTitle>
-        <CardDescription className="text-center">
-          Use your credentials to continue
-        </CardDescription>
-      </CardHeader>
-
       <CardContent>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-2">
@@ -102,26 +82,6 @@ export function LoginForm() {
               "Sign In"
             )}
           </Button>
-
-          <div className="mt-4 text-center">
-            <span className="text-sm text-muted-foreground block mb-2">
-              Or login with
-            </span>
-            <Button
-              variant="outline"
-              className="w-full h-10 flex items-center justify-center gap-2"
-              onClick={handleGoogleLogin}
-            >
-              <Image
-                src="/assets/images/google-icon.jpg"
-                alt="Google"
-                width={20}
-                height={20}
-                className="object-contain"
-              />
-              Google
-            </Button>
-          </div>
         </form>
       </CardContent>
     </Card>
