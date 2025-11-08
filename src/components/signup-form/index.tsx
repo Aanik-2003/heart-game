@@ -12,6 +12,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 import { Checkbox } from "../ui/checkbox";
 import { signUpSchema, SignUpSchema } from "./signup-schems";
+import { FormField } from "../ui/form";
 
 export function SignUpForm() {
   const [isLoading, setIsLoading] = useState(false);
@@ -19,8 +20,11 @@ export function SignUpForm() {
   const form = useForm<SignUpSchema>({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
+      name: "",
       email: "",
       password: "",
+      confirmPassword: "",
+      termsAccepted: false,
     },
   });
 
@@ -64,6 +68,7 @@ export function SignUpForm() {
               id="signup-email"
               type="email"
               placeholder="name@example.com"
+              autoComplete="email"
               disabled={isLoading}
               className="h-10"
               {...form.register("email")}
@@ -83,6 +88,7 @@ export function SignUpForm() {
               id="signup-password"
               type="password"
               placeholder="••••••••"
+              autoComplete="new-password"
               disabled={isLoading}
               className="h-10"
               {...form.register("password")}
@@ -105,6 +111,7 @@ export function SignUpForm() {
               id="signup-confirm-password"
               type="password"
               placeholder="••••••••"
+              autoComplete="new-password"
               disabled={isLoading}
               className="h-10"
               {...form.register("confirmPassword")}
@@ -116,22 +123,33 @@ export function SignUpForm() {
             )}
           </div>
 
-          <div className="flex items-start space-x-2">
-            <Checkbox
-              id="terms"
-              disabled={isLoading}
-              {...form.register("termsAccepted")}
-            />
-            <Label
-              htmlFor="terms"
-              className="text-sm font-medium cursor-pointer"
-            >
-              I accept the{" "}
-              <button type="button" className="text-primary hover:underline">
-                terms and conditions
-              </button>
-            </Label>
-          </div>
+          <FormField
+            control={form.control}
+            name="termsAccepted"
+            render={({ field }) => (
+              <div className="flex items-start space-x-2">
+                <Checkbox
+                  id="terms"
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                  disabled={isLoading}
+                />
+                <Label
+                  htmlFor="terms"
+                  className="text-sm font-medium cursor-pointer"
+                >
+                  I accept the{" "}
+                  <button
+                    type="button"
+                    className="text-primary hover:underline"
+                  >
+                    terms and conditions
+                  </button>
+                </Label>
+              </div>
+            )}
+          />
+
           {form.formState.errors.termsAccepted && (
             <p className="text-sm text-red-500">
               {form.formState.errors.termsAccepted.message}
