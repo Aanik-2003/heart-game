@@ -1,5 +1,5 @@
 export type HeartApiResponse = {
   carrots: number;
-  hearts: number;
-  image: string;
+  solution: number;
+  question: string;
 };
