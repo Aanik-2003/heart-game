@@ -13,6 +13,7 @@ import { toast } from "sonner";
 import { Checkbox } from "../ui/checkbox";
 import { signUpSchema, SignUpSchema } from "./signup-schems";
 import { FormField } from "../ui/form";
+import { signUp } from "@/app/actions/auth";
 
 export function SignUpForm() {
   const [isLoading, setIsLoading] = useState(false);
@@ -30,11 +31,25 @@ export function SignUpForm() {
 
   const onSubmit = async (values: SignUpSchema) => {
     setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
+    try {
+      const formData = new FormData();
+      formData.append("name", values.name);
+      formData.append("email", values.email);
+      formData.append("password", values.password);
+
+      await signUp(formData);
+
       toast.success(`Welcome back, ${values.email}!`);
       form.reset();
-    }, 1200);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        toast.error(err.message || "Something went wrong");
+      } else {
+        toast.error("Something went wrong");
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (

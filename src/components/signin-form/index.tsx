@@ -12,6 +12,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 import { signinSchema, SignInSchema } from "./signin-schema";
 import { Eye, EyeOff } from "lucide-react";
+import { signIn } from "@/app/actions/auth";
 
 export function SignInForm() {
   const [isLoading, setIsLoading] = useState(false);
@@ -27,11 +28,26 @@ export function SignInForm() {
 
   const onSubmit = async (values: SignInSchema) => {
     setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
+    try {
+      const formData = new FormData();
+      formData.append("email", values.email);
+      formData.append("password", values.password);
+
+      await signIn(formData);
+
       toast.success(`Welcome back, ${values.email}!`);
       form.reset();
-    }, 1200);
+    } catch (err: unknown) {
+      const errorMessage =
+        err instanceof Error
+          ? err.message
+          : typeof err === "string"
+            ? err
+            : "Something went wrong during sign in.";
+      toast.error(errorMessage);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -65,7 +81,7 @@ export function SignInForm() {
                 autoComplete="current-password"
                 disabled={isLoading}
                 {...form.register("password")}
-                className="pr-10" // ensures space for the icon
+                className="pr-10"
               />
 
               <button

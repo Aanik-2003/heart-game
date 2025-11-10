@@ -2,6 +2,9 @@
 
 import { LogOut } from "lucide-react";
 import { Button } from "../ui/button";
+import { signOut } from "@/app/actions/auth";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 interface GameHeaderProps {
   score: number;
@@ -9,13 +12,28 @@ interface GameHeaderProps {
 }
 
 export default function GameHeader({ score, streak }: GameHeaderProps) {
-  const handleLogout = () => {
-    console.log("log out btn pressed");
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    console.log("Log out button pressed");
+    try {
+      const response = await signOut();
+
+      if (response.success) {
+        toast.success("Logged out successfully!");
+        router.push("/login");
+      } else {
+        toast.error(response.error || "Logout failed");
+      }
+    } catch (err) {
+      toast.error("Something went wrong during logout");
+      console.error(err);
+    }
   };
 
   return (
     <header className="border-b border-border bg-card/50 sticky top-0 z-10">
-      <div className="container mx-auto px-4 py-6 flex items-center justify-between">
+      <div className="container mx-auto px-4 py-6 flex flex-wrap gap-6 items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-lg flex items-center justify-center">
             <span className="text-xl font-bold ">🎮</span>
