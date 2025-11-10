@@ -15,7 +15,6 @@ export default function GameHeader({ score, streak }: GameHeaderProps) {
   const router = useRouter();
 
   const handleLogout = async () => {
-    console.log("Log out button pressed");
     try {
       const response = await signOut();
 

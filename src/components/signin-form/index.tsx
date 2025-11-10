@@ -13,10 +13,12 @@ import { toast } from "sonner";
 import { signinSchema, SignInSchema } from "./signin-schema";
 import { Eye, EyeOff } from "lucide-react";
 import { signIn } from "@/app/actions/auth";
+import { useRouter } from "next/navigation";
 
 export function SignInForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const router = useRouter();
 
   const form = useForm<SignInSchema>({
     resolver: zodResolver(signinSchema),
@@ -33,18 +35,17 @@ export function SignInForm() {
       formData.append("email", values.email);
       formData.append("password", values.password);
 
-      await signIn(formData);
+      const response = await signIn(formData);
 
-      toast.success(`Welcome back, ${values.email}!`);
-      form.reset();
+      if (response.success) {
+        toast.success(`Welcome back, ${values.email}!`);
+        form.reset();
+        router.push("/");
+      } else {
+        toast.error(response.error || "Sign in failed");
+      }
     } catch (err: unknown) {
-      const errorMessage =
-        err instanceof Error
-          ? err.message
-          : typeof err === "string"
-            ? err
-            : "Something went wrong during sign in.";
-      toast.error(errorMessage);
+      console.log("err", err);
     } finally {
       setIsLoading(false);
     }

@@ -42,7 +42,7 @@ export default function AnswerInput({
       />
       <Button
         onClick={onSubmit}
-        className="px-8 h-12 text-base font-semibold bg-gradient-to-r from-primary to-accent hover:shadow-lg hover:shadow-primary/50 transition-all"
+        className="px-8 h-12 text-base font-semibold hover:shadow-lg hover:shadow-primary/50 transition-all"
       >
         Submit
       </Button>

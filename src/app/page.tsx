@@ -16,7 +16,6 @@ export default function Home() {
     const fetchHearApiFucntion = async () => {
       try {
         const response = await getHeartApi();
-        console.log("Heart API Response:", response?.question);
         setApiResponse(response);
       } catch (error) {
         console.error("Error fetching Heart API:", error);

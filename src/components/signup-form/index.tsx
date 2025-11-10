@@ -14,9 +14,11 @@ import { Checkbox } from "../ui/checkbox";
 import { signUpSchema, SignUpSchema } from "./signup-schems";
 import { FormField } from "../ui/form";
 import { signUp } from "@/app/actions/auth";
+import { useRouter } from "next/navigation";
 
 export function SignUpForm() {
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
   const form = useForm<SignUpSchema>({
     resolver: zodResolver(signUpSchema),
@@ -37,10 +39,15 @@ export function SignUpForm() {
       formData.append("email", values.email);
       formData.append("password", values.password);
 
-      await signUp(formData);
+      const response = await signUp(formData);
 
-      toast.success(`Welcome back, ${values.email}!`);
-      form.reset();
+      if (response?.success) {
+        toast.success(`Welcome back, ${values.email}!`);
+        form.reset();
+        router.push("/");
+      } else {
+        toast.error(response?.error || "Sign up failed");
+      }
     } catch (err: unknown) {
       if (err instanceof Error) {
         toast.error(err.message || "Something went wrong");
