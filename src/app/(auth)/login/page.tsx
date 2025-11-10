@@ -10,8 +10,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { authClient } from "@/lib/auth-client";
 import Image from "next/image";
-import React, { useState } from "react";
+import { useState } from "react";
 
 type AuthMode = "signin" | "signup";
 
@@ -19,8 +20,12 @@ const LoginPage = () => {
   const [authMode, setAuthMode] = useState<AuthMode>("signin");
 
   const handleGoogleLogin = async () => {
-    console.log("google btn is pressed");
+    await authClient.signIn.social({
+      provider: "google",
+      callbackURL: "/",
+    });
   };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-secondary p-4">
       <Card className="w-full max-w-md ">
