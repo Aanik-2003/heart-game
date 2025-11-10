@@ -1,17 +1,19 @@
 import { AxiosError } from "axios";
 import apiClient from "./apiHepler";
+import { HeartApiResponse } from "@/types/api";
 
-// get heart api
-export const getHearApi = async () => {
+export const getHeartApi = async (): Promise<HeartApiResponse> => {
   try {
-    const response = await apiClient.get(`heart/api.php`);
+    const response = await apiClient.get("heart/api.php?out=json");
     return response.data;
   } catch (error: unknown) {
     if (error instanceof AxiosError) {
-      throw new Error(error.response?.data?.message || "An error occurred");
+      const msg = error.response?.data?.message || error.message;
+      throw new Error(msg);
+    } else if (error instanceof Error) {
+      throw new Error(error.message);
     } else {
-      // Fallback for unknown errors
-      return new Error("An unknown error occurred");
+      throw new Error("An unknown error occurred");
     }
   }
 };

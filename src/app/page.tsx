@@ -1,14 +1,17 @@
 "use client";
 
-import { getHearApi } from "@/lib/api";
-import { useEffect } from "react";
+import { getHeartApi } from "@/lib/api";
+import { HeartApiResponse } from "@/types/api";
+import { useEffect, useState } from "react";
 
 export default function Home() {
+  const [apiResponse, setApiResponse] = useState<HeartApiResponse | null>(null);
   useEffect(() => {
     const fetchHearApiFucntion = async () => {
       try {
-        const response = await getHearApi();
+        const response = await getHeartApi();
         console.log("Heart API Response:", response);
+        setApiResponse(response);
       } catch (error) {
         console.error("Error fetching Heart API:", error);
       }
@@ -19,6 +22,7 @@ export default function Home() {
   return (
     <div>
       <h1>Welcome to My Next.js App</h1>
+      <span>Res: {apiResponse?.carrots}</span>
     </div>
   );
 }
