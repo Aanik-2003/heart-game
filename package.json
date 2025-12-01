@@ -12,7 +12,8 @@
     "test": "jest --maxWorkers=2 --passWithNoTests || echo 'No tests found, passing...'",
     "type-check": "tsc --noEmit || echo 'Type check passed!'",
     "test:watch": "jest --watch",
-    "husky": "npm run format && npm run build && npm run lint && npm run test && npm run type-check"
+    "husky": "npm run format && npm run build && npm run lint && npm run test && npm run type-check",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
