@@ -5,6 +5,7 @@ import { Button } from "../ui/button";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { signOut } from "@/lib/auth-actions";
+import { useGameStore } from "@/store/gameStore";
 
 interface GameHeaderProps {
   score: number;
@@ -13,13 +14,14 @@ interface GameHeaderProps {
 
 export default function GameHeader({ score, streak }: GameHeaderProps) {
   const router = useRouter();
-
+  const { reset } = useGameStore();
   const handleLogout = async () => {
     try {
       const response = await signOut();
 
       if (response.success) {
         toast.success("Logged out successfully!");
+        reset();
         router.push("/login");
       } else {
         toast.error(response.error || "Logout failed");

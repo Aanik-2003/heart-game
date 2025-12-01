@@ -26,8 +26,10 @@ export default function GameBoard({
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = () => {
-    setLoading(true);
-    if (!apiResponse?.solution || userAnswer === "") return;
+    if (userAnswer.trim() === "") return;
+
+    const solution = apiResponse?.solution;
+    if (solution === undefined || solution === null) return;
 
     const isCorrect = Number.parseInt(userAnswer) === apiResponse?.solution;
     console.log("asdfsdaf", isCorrect);
