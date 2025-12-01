@@ -22,7 +22,7 @@ export default function GameBoard({
 }: GameBoardProps) {
   const [userAnswer, setUserAnswer] = useState("");
   const [feedback, setFeedback] = useState<"correct" | "incorrect" | null>(
-    null
+    null,
   );
   const [loading, setLoading] = useState(false);
   const { lifelines, nextRechargeUtc } = useLifeStore();

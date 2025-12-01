@@ -45,7 +45,7 @@ export async function GET() {
           score: g._max.score,
           streak: g._max.streak,
         };
-      })
+      }),
     );
 
     // Sort descending by score
