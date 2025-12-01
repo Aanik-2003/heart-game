@@ -4,8 +4,14 @@ import GameBoard from "@/components/dashboard/game-board";
 import GameFooter from "@/components/dashboard/game-footer";
 import GameHeader from "@/components/dashboard/game-header";
 import Leaderboard from "@/components/dashboard/leaderboard";
-import { getHeartApi, saveGame } from "@/lib/api";
+import {
+  fetchLifelines,
+  getHeartApi,
+  saveGame,
+  consumeLifeline,
+} from "@/lib/api";
 import { useGameStore } from "@/store/gameStore";
+import { useLifeStore } from "@/store/lifelineStore";
 import { HeartApiResponse } from "@/types/api";
 import { useEffect, useState } from "react";
 
@@ -13,6 +19,7 @@ export default function Home() {
   const [apiResponse, setApiResponse] = useState<HeartApiResponse | null>(null);
   const { score, streak, incrementScore, incrementStreak, reset } =
     useGameStore();
+
   useEffect(() => {
     const fetchHearApiFucntion = async () => {
       try {
@@ -23,6 +30,16 @@ export default function Home() {
       }
     };
     fetchHearApiFucntion();
+  }, []);
+
+  useEffect(() => {
+    const loadLife = async () => {
+      const data = await fetchLifelines();
+      console.log("lifeline data", data);
+      useLifeStore.getState().setLifeData(data);
+    };
+
+    loadLife();
   }, []);
 
   const onCorrect = async () => {
@@ -37,14 +54,50 @@ export default function Home() {
     setApiResponse(response);
   };
 
-  const onIncorrect = async () => {
-    // Next question
-    const response = await getHeartApi();
-    setApiResponse(response);
+  // const onIncorrect = async () => {
+  //   // Next question
+  //   const response = await getHeartApi();
+  //   setApiResponse(response);
 
-    // Save zeroed game progress
-    await saveGame(0, 0);
-    reset();
+  //   // Save zeroed game progress
+  //   await saveGame(0, 0);
+  //   reset();
+  // };
+
+  const onIncorrect = async () => {
+    try {
+      const data = await consumeLifeline(); // POST API call
+      console.log("consumed lifeline", data);
+
+      if (data.success && data.lifelines !== undefined) {
+        console.log("success consuming, lifelines remaining:", data.lifelines);
+
+        // Lifeline used → DO NOT reset score or streak
+        useLifeStore.getState().setLifeData({
+          lifelines: data.lifelines,
+          nextRechargeUtc: data.nextRechargeUtc || null,
+        });
+
+        // Next question
+        const response = await getHeartApi();
+        setApiResponse(response);
+      } else {
+        // No lifelines → reset game
+        console.log("no lifelines left, resetting game");
+        useLifeStore.getState().setLifeData({
+          lifelines: 0,
+          nextRechargeUtc: null,
+        });
+        reset();
+        await saveGame(0, 0);
+
+        // Next question
+        const response = await getHeartApi();
+        setApiResponse(response);
+      }
+    } catch (err) {
+      console.error("Error using lifeline:", err);
+    }
   };
 
   return (
