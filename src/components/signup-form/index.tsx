@@ -13,8 +13,8 @@ import { toast } from "sonner";
 import { Checkbox } from "../ui/checkbox";
 import { signUpSchema, SignUpSchema } from "./signup-schems";
 import { FormField } from "../ui/form";
-import { signUp } from "@/app/actions/auth";
 import { useRouter } from "next/navigation";
+import { signUp } from "@/lib/auth-actions";
 
 export function SignUpForm() {
   const [isLoading, setIsLoading] = useState(false);

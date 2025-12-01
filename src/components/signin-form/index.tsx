@@ -12,8 +12,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 import { signinSchema, SignInSchema } from "./signin-schema";
 import { Eye, EyeOff } from "lucide-react";
-import { signIn } from "@/app/actions/auth";
 import { useRouter } from "next/navigation";
+import { signIn } from "@/lib/auth-actions";
 
 export function SignInForm() {
   const [isLoading, setIsLoading] = useState(false);

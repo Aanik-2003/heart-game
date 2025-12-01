@@ -2,9 +2,9 @@
 
 import { LogOut } from "lucide-react";
 import { Button } from "../ui/button";
-import { signOut } from "@/app/actions/auth";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { signOut } from "@/lib/auth-actions";
 
 interface GameHeaderProps {
   score: number;

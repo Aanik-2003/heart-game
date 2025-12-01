@@ -1,6 +1,13 @@
+import { HeartApiResponse } from "@/types/api";
 import { AxiosError } from "axios";
 import apiClient from "./apiHepler";
-import { HeartApiResponse } from "@/types/api";
+
+export interface LeaderboardEntry {
+  userId: string;
+  name: string;
+  score: number | null;
+  streak: number | null;
+}
 
 export const getHeartApi = async (): Promise<HeartApiResponse> => {
   try {
@@ -17,3 +24,22 @@ export const getHeartApi = async (): Promise<HeartApiResponse> => {
     }
   }
 };
+
+export async function saveGame(score: number, streak: number) {
+  const res = await fetch("/api/game", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ score, streak }),
+    credentials: "include",
+  });
+
+  return res.json();
+}
+
+export async function fetchLeaderboard(): Promise<{
+  success: boolean;
+  leaderboard: LeaderboardEntry[];
+}> {
+  const res = await fetch("/api/game");
+  return res.json();
+}

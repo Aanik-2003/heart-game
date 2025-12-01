@@ -3,15 +3,16 @@
 import GameBoard from "@/components/dashboard/game-board";
 import GameFooter from "@/components/dashboard/game-footer";
 import GameHeader from "@/components/dashboard/game-header";
-import { getHeartApi } from "@/lib/api";
+import Leaderboard from "@/components/dashboard/leaderboard";
+import { getHeartApi, saveGame } from "@/lib/api";
+import { useGameStore } from "@/store/gameStore";
 import { HeartApiResponse } from "@/types/api";
 import { useEffect, useState } from "react";
 
 export default function Home() {
   const [apiResponse, setApiResponse] = useState<HeartApiResponse | null>(null);
-  const [score, setScore] = useState(0);
-  const [streak, setStreak] = useState(0);
-
+  const { score, streak, incrementScore, incrementStreak, reset } =
+    useGameStore();
   useEffect(() => {
     const fetchHearApiFucntion = async () => {
       try {
@@ -25,32 +26,42 @@ export default function Home() {
   }, []);
 
   const onCorrect = async () => {
-    setScore((prev) => prev + 10);
-    setStreak((prev) => prev + 1);
+    incrementScore(10);
+    incrementStreak();
 
-    try {
-      const response = await getHeartApi();
-      console.log("Next Question:", response?.question);
-      setApiResponse(response);
-    } catch (error) {
-      console.error("Error fetching next question:", error);
-    }
+    // Save current game progress
+    await saveGame(score + 10, streak + 1);
+
+    // Next question
+    const response = await getHeartApi();
+    setApiResponse(response);
   };
 
-  const onIncorrect = () => {
-    setStreak(0);
-    setScore(0);
+  const onIncorrect = async () => {
+    // Next question
+    const response = await getHeartApi();
+    setApiResponse(response);
+
+    // Save zeroed game progress
+    await saveGame(0, 0);
+    reset();
   };
 
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
       <GameHeader score={score} streak={streak} />
-      <main className="flex-1 flex items-center justify-center px-4 py-8 md:py-12">
-        <GameBoard
-          apiResponse={apiResponse}
-          onCorrect={onCorrect}
-          onIncorrect={onIncorrect}
-        />
+      <main className="flex-1 flex flex-col md:flex-row items-start justify-center px-4 py-8 md:py-12 gap-8">
+        <div className="flex-1 max-w-2xl">
+          <GameBoard
+            apiResponse={apiResponse}
+            onCorrect={onCorrect}
+            onIncorrect={onIncorrect}
+          />
+        </div>
+
+        <div className="w-full md:w-80 flex-shrink-0">
+          <Leaderboard />
+        </div>
       </main>
       <GameFooter />
     </div>
