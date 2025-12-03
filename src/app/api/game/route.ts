@@ -1,12 +1,11 @@
-import prisma from "@/lib/prisma";
 import { auth } from "@/lib/auth";
+import prisma from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
   try {
     // Get the current session
     const session = await auth.api.getSession({ headers: req.headers });
-    console.log("Session:", session);
     if (!session?.user) {
       return NextResponse.json({ success: false, error: "Not logged in" });
     }

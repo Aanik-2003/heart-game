@@ -37,16 +37,19 @@ model session {
 }
 
 model user {
-  id            String        @id
-  name          String
-  email         String        @unique(map: "sqlite_autoindex_user_2")
-  emailVerified Int
-  image         String?
-  createdAt     DateTime
-  updatedAt     DateTime
-  account       account[]
-  session       session[]
-  gameHistory   GameHistory[]
+  id              String        @id
+  name            String
+  email           String        @unique(map: "sqlite_autoindex_user_2")
+  emailVerified   Int
+  image           String?
+  createdAt       DateTime
+  updatedAt       DateTime
+  account         account[]
+  session         session[]
+  gameHistory     GameHistory[]
+  lifelines       Int           @default(3)
+  maxLifelines    Int           @default(3)
+  nextRechargeUtc DateTime      @default(now())
 }
 
 model verification {

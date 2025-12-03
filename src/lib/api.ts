@@ -43,3 +43,25 @@ export async function fetchLeaderboard(): Promise<{
   const res = await fetch("/api/game");
   return res.json();
 }
+
+export async function fetchLifelines(): Promise<{
+  lifelines: number;
+  nextRechargeUtc: string | null;
+}> {
+  const res = await fetch("/api/lifeline");
+  return res.json();
+}
+
+export async function consumeLifeline(): Promise<{
+  success: boolean;
+  lifelines?: number;
+  nextRechargeUtc?: string;
+  error?: string;
+}> {
+  const res = await fetch("/api/lifeline", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+  });
+  return res.json();
+}
