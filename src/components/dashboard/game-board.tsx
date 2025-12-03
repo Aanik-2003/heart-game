@@ -25,7 +25,7 @@ export default function GameBoard({
     null,
   );
   const [loading, setLoading] = useState(false);
-  const { lifelines, nextRechargeUtc } = useLifeStore();
+  const { lifelines, nextRechargeUtc, setLifeData } = useLifeStore();
   const [countdown, setCountdown] = useState<string>("");
 
   useEffect(() => {
@@ -41,6 +41,13 @@ export default function GameBoard({
 
       if (diff <= 0) {
         setCountdown("Ready!");
+        // Update lifeline count when countdown completes
+        if (lifelines < 3) {
+          setLifeData({
+            lifelines: lifelines + 1,
+            nextRechargeUtc: null,
+          });
+        }
         return;
       }
 
@@ -55,7 +62,7 @@ export default function GameBoard({
     const interval = setInterval(updateCountdown, 1000);
 
     return () => clearInterval(interval);
-  }, [nextRechargeUtc, lifelines]);
+  }, [nextRechargeUtc, lifelines, setLifeData]);
 
   const handleSubmit = () => {
     if (userAnswer.trim() === "") return;
