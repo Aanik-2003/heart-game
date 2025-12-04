@@ -23,7 +23,7 @@ export async function getLifelines(userId: string) {
     // Calculate new lifeline count (capped at max)
     const newLifelines = Math.min(
       user.lifelines + elapsedPeriods,
-      user.maxLifelines
+      user.maxLifelines,
     );
 
     // Calculate the next recharge time from the last completed recharge period
@@ -35,11 +35,11 @@ export async function getLifelines(userId: string) {
       // Set to the next recharge time based on the last completed period
       const completedPeriods = Math.min(
         elapsedPeriods,
-        user.maxLifelines - user.lifelines
+        user.maxLifelines - user.lifelines,
       );
       nextRecharge = addSeconds(
         user.nextRechargeUtc,
-        completedPeriods * rechargeSeconds
+        completedPeriods * rechargeSeconds,
       );
     }
 
