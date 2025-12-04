@@ -47,8 +47,8 @@ model user {
   account         account[]
   session         session[]
   gameHistory     GameHistory[]
-  lifelines       Int           @default(3)
-  maxLifelines    Int           @default(3)
+  lifelines       Int           @default(5)
+  maxLifelines    Int           @default(5)
   nextRechargeUtc DateTime      @default(now())
 }
 

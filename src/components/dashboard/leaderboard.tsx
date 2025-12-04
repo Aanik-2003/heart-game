@@ -7,22 +7,33 @@ import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
 import { fetchLeaderboard, type LeaderboardEntry } from "@/lib/api";
 import { Flame, Medal, Trophy } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
-export default function Leaderboard() {
+interface LeaderboardProps {
+  refreshTrigger?: number;
+}
+
+export default function Leaderboard({ refreshTrigger }: LeaderboardProps) {
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const loadLeaderboard = async () => {
-    setLoading(true);
+  const loadLeaderboard = useCallback(async (showLoading = true) => {
+    if (showLoading) setLoading(true);
     const res = await fetchLeaderboard();
     if (res.success) setLeaderboard(res.leaderboard);
-    setLoading(false);
-  };
+    if (showLoading) setLoading(false);
+  }, []);
 
   useEffect(() => {
     loadLeaderboard();
-  }, []);
+  }, [loadLeaderboard]);
+
+  // Refresh when parent component triggers (after score update)
+  useEffect(() => {
+    if (refreshTrigger !== undefined && refreshTrigger > 0) {
+      loadLeaderboard(false);
+    }
+  }, [refreshTrigger, loadLeaderboard]);
 
   const getRankIcon = (position: number) => {
     if (position === 1) return <Trophy className="w-5 h-5 text-chart-5" />;
