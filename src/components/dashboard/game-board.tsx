@@ -100,15 +100,17 @@ export default function GameBoard({
           <div className="space-y-6">
             <QuestionCard questionUrl={apiResponse?.question} />
             {/* Lifelines UI */}
-            <div className="flex items-center gap-4">
-              <div className="flex gap-2">
-                {Array.from({ length: lifelines }, (_, i) => (
-                  <span key={i} className="text-2xl text-red-500">
-                    ❤️
-                  </span>
-                ))}
+            {lifelines > 0 && (
+              <div className="flex items-center gap-4">
+                <div className="flex gap-2">
+                  {Array.from({ length: lifelines }, (_, i) => (
+                    <span key={i} className="text-2xl text-red-500">
+                      ❤️
+                    </span>
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
 
             {/* Show message when no lifelines */}
             {lifelines <= 0 && (
