@@ -19,6 +19,7 @@ export default function Home() {
   const [apiResponse, setApiResponse] = useState<HeartApiResponse | null>(null);
   const { score, streak, incrementScore, incrementStreak, reset } =
     useGameStore();
+  const [refreshLeaderboard, setRefreshLeaderboard] = useState(0);
 
   useEffect(() => {
     const fetchHearApiFucntion = async () => {
@@ -52,17 +53,8 @@ export default function Home() {
     // Next question
     const response = await getHeartApi();
     setApiResponse(response);
+    setRefreshLeaderboard((prev) => prev + 1); // Trigger leaderboard refresh
   };
-
-  // const onIncorrect = async () => {
-  //   // Next question
-  //   const response = await getHeartApi();
-  //   setApiResponse(response);
-
-  //   // Save zeroed game progress
-  //   await saveGame(0, 0);
-  //   reset();
-  // };
 
   const onIncorrect = async () => {
     try {
@@ -113,7 +105,7 @@ export default function Home() {
         </div>
 
         <div className="w-full md:w-80 flex-shrink-0">
-          <Leaderboard />
+          <Leaderboard refreshTrigger={refreshLeaderboard} />
         </div>
       </main>
       <GameFooter />

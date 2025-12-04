@@ -25,11 +25,12 @@ export default function GameBoard({
     null,
   );
   const [loading, setLoading] = useState(false);
-  const { lifelines, nextRechargeUtc, setLifeData } = useLifeStore();
+  const { lifelines, nextRechargeUtc, setLifeData, maxLifelines } =
+    useLifeStore();
   const [countdown, setCountdown] = useState<string>("");
 
   useEffect(() => {
-    if (!nextRechargeUtc || lifelines >= 3) {
+    if (!nextRechargeUtc || lifelines >= maxLifelines) {
       setCountdown("");
       return;
     }
@@ -42,7 +43,7 @@ export default function GameBoard({
       if (diff <= 0) {
         setCountdown("Ready!");
         // Update lifeline count when countdown completes
-        if (lifelines < 3) {
+        if (lifelines < maxLifelines) {
           setLifeData({
             lifelines: lifelines + 1,
             nextRechargeUtc: null,
@@ -62,10 +63,11 @@ export default function GameBoard({
     const interval = setInterval(updateCountdown, 1000);
 
     return () => clearInterval(interval);
-  }, [nextRechargeUtc, lifelines, setLifeData]);
+  }, [nextRechargeUtc, lifelines, setLifeData, maxLifelines]);
 
   const handleSubmit = () => {
     if (userAnswer.trim() === "") return;
+    if (lifelines <= 0) return;
 
     const solution = apiResponse?.solution;
     if (solution === undefined || solution === null) return;
@@ -106,20 +108,37 @@ export default function GameBoard({
                   </span>
                 ))}
               </div>
-              {countdown && lifelines < 3 && (
-                <div className="text-sm text-muted-foreground">
-                  Next lifeline in:{" "}
-                  <span className="font-medium">{countdown}</span>
-                </div>
-              )}
             </div>
-            <AnswerInput
-              value={userAnswer}
-              onChange={setUserAnswer}
-              onSubmit={handleSubmit}
-              disabled={loading || feedback !== null}
-              placeholder="Enter your answer"
-            />
+
+            {/* Show message when no lifelines */}
+            {lifelines <= 0 && (
+              <div className="p-4 bg-destructive/10 border border-destructive/20 rounded-lg text-center">
+                <p className="text-destructive font-medium">
+                  No lifelines remaining! Wait for the next recharge to continue
+                  playing.
+                </p>
+                {countdown && lifelines < maxLifelines && (
+                  <p className="text-sm text-muted-foreground mt-2">
+                    Next lifeline in:{" "}
+                    <span className="font-medium">{countdown}</span>
+                  </p>
+                )}
+              </div>
+            )}
+
+            {lifelines > 0 && (
+              <AnswerInput
+                value={userAnswer}
+                onChange={setUserAnswer}
+                onSubmit={handleSubmit}
+                disabled={loading || feedback !== null || lifelines <= 0}
+                placeholder={
+                  lifelines <= 0
+                    ? "No lifelines remaining"
+                    : "Enter your answer"
+                }
+              />
+            )}
 
             {feedback && (
               <FeedbackOverlay
