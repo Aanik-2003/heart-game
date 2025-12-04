@@ -1,36 +1,123 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ❤️ heart-game
 
-## Getting Started
+> A fun interactive game built with Next.js + Prisma (and more) — test your reflexes and reaction time in a playful, lovable UI.
 
-First, run the development server:
+## 🚀 Table of Contents
+
+- [About](#about)  
+- [Features](#features)  
+- [Tech Stack](#tech-stack)  
+- [Getting Started](#getting-started)  
+- [Usage](#usage)  
+- [Folder Structure](#folder-structure)  
+- [Roadmap / To-Do](#roadmap--to-do)  
+- [Contributing](#contributing)  
+- [License](#license)  
+
+---
+
+## 📖 About
+
+Heart-game is a web-based game application designed to deliver an enjoyable, interactive experience. It’s built with modern web technologies and aims to be both lightweight and fun. Whether you’re passing time or testing your reflexes, heart-game offers an engaging and responsive UI.  
+
+This project reflects learning and experimentation with full-stack web development, database integration, and UI/UX design.  
+
+
+## ✨ Features
+
+- 🎯 Fast and responsive gameplay  
+- ❤️ Intuitive UI/UX with smooth navigation and game interactions  
+- 🔄 Persistent data storage (via Prisma + database + zustand) — track scores or user data (as applicable)  
+- 🔧 Easily extendable codebase — adding new levels, themes, or features is straightforward  
+- 🚀 Built with modern web frameworks and tools  
+
+*(Feel free to expand or modify this list based on actual implemented features.)*
+
+---
+
+## 🛠️ Tech Stack
+
+- [Next.js](https://nextjs.org) — React framework for server-side rendering & routing  
+- [Prisma](https://www.prisma.io) — ORM for database integrations  
+- TypeScript & JavaScript — for frontend and backend logic  
+- CSS / Tailwind (or your chosen styling) — for UI styling  
+- Other tools (ESLint, Prettier, etc.) — for code quality & consistency  
+
+---
+
+## 🧑‍💻 Getting Started
+
+### Prerequisites
+
+Make sure you have the following installed:
+
+- Node.js (version >= 14)  
+- npm / yarn / pnpm / bun (whichever you prefer)  
+- A database (if using Prisma — configure accordingly)  
+
+### Installation
 
 ```bash
-npm run dev
+# Clone the repo
+git clone https://github.com/Aanik-2003/heart-game.git
+cd heart-game
+
+# Install dependencies
+npm install
 # or
-yarn dev
+yarn install
 # or
-pnpm dev
+pnpm install
 # or
-bun dev
+bun install
+
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🎮 Usage
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+After installing and running the development server:
 
-## Learn More
+1. Open [http://localhost:3000](http://localhost:3000) in your browser.
+2. Choose your seat and sign up for new user.
+3. After successful sign up, you will be redirect to the game dashboard.
+4. Start playing and watch the round results and see how your strategy fares!
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 📁 Folder Structure
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+heart-game/
+├── public/               # Static assets (images, icons, etc.)
+├── src/                  # Main source code (components, pages, logic)
+├── prisma/               # Database schema & migrations
+├── .eslintrc.json        # Linting config
+├── prettier.json         # Code formatting config
+├── tailwind.config.ts    # (or other styling config)
+├── package.json          # Dependencies & scripts
+└── README.md             
+```
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🤝 Contributing
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Contributions are welcome!
+
+1. Fork the project
+2. Create your feature branch (`git checkout -b feature/YourFeature`)
+3. Commit your changes (`git commit -m 'Add feature'`)
+4. Push to the branch (`git push origin feature/YourFeature`)
+5. Open a Pull Request
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for details.
+
+---
+
+## 📜 License
+
+Distributed under the MIT License. See [LICENSE](LICENSE) for more information.
+
+---
